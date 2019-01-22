@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace GiftFileReader.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class GiftsImporterTests
     {
         [TestMethod]
         public void TestMethod1()
