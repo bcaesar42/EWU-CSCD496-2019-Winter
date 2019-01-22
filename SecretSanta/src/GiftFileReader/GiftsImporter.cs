@@ -2,7 +2,8 @@
 
 namespace GiftFileReader
 {
-    public class Class1
+    public class GiftsImporter
     {
+
     }
 }
