@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 
 namespace GiftFileReader.Tests
@@ -6,19 +7,25 @@ namespace GiftFileReader.Tests
     [TestClass]
     public class GiftsImporterTests
     {
-        private const string filePath1 = @"\TestFiles\TestGifts1.txt"; //Standard (multiple gifts)
-        private const string filePath2 = @"\TestFiles\TestGifts2.txt"; //Empty file
-        private const string filePath3 = @"\TestFiles\TestGifts3.txt"; //Backwards name
-        private const string filePath4 = @"\TestFiles\TestGifts4.txt"; //Name, but no text
-        private const string filePath5 = @"\TestFiles\TestGifts5.txt"; //One gift
-        private const string filePath6 = @"\TestFiles\TestGifts6.txt"; //Non-existant file
+        private const string filePath1 = @".\TestGifts1.txt"; //Standard (multiple gifts)
+        private const string filePath2 = @".\TestGifts2.txt"; //Empty file
+        private const string filePath3 = @".\TestGifts3.txt"; //Backwards name
+        private const string filePath4 = @".\TestGifts4.txt"; //Name, but no text
+        private const string filePath5 = @".\TestGifts5.txt"; //One gift
+        private const string filePath6 = @".\TestGifts6.txt"; //Non-existant file
 
-        public string GlobalPath { get; set; }
+        private string GlobalPath
+        {
+            get
+            {
+                return System.Environment.CurrentDirectory;
+            }
+        }
 
         [TestInitialize]
         public void IntializeTests()
         {
-            DeleteTestFiles();
+            DeleteTestFiles2();
             SetupFile1();
             SetupFile2();
             SetupFile3();
@@ -97,13 +104,26 @@ namespace GiftFileReader.Tests
             foreach (string path in filePaths)
             {
                 toDelete = Path.Combine(GlobalPath, path);
-                File.Delete(toDelete);
+                try
+                {
+                    File.Delete(toDelete);
+                }
+                catch (Exception)
+                {
+
+                }
             }
+        }
+
+        private void DeleteTestFiles2()
+        {
+            File.Delete(Path.Combine(System.Environment.CurrentDirectory, filePath1));
         }
 
         [TestMethod]
         public void TestMethod1()
         {
+            Assert.IsTrue(true);
         }
     }
 }
