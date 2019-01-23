@@ -25,7 +25,7 @@ namespace GiftFileReader.Tests
         [TestInitialize]
         public void IntializeTests()
         {
-            DeleteTestFiles2();
+            DeleteTestFiles();
             SetupFile1();
             SetupFile2();
             SetupFile3();
@@ -115,15 +115,17 @@ namespace GiftFileReader.Tests
             }
         }
 
-        private void DeleteTestFiles2()
+        [TestMethod]
+        public void TestInitialization_InitializationSuccessful()
         {
-            File.Delete(Path.Combine(System.Environment.CurrentDirectory, filePath1));
+            Assert.IsTrue(true);
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void GetAbsolutePath_ValidFileRelativePath_ReturnsAbsolutePath()
         {
-            Assert.IsTrue(true);
+            GiftsImporter importer = new GiftsImporter();
+            Assert.AreEqual<string>(filePath1, importer.GetAbsolutePath(filePath1));
         }
     }
 }
