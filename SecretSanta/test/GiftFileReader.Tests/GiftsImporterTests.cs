@@ -132,16 +132,30 @@ namespace SecretSanta.Import.Tests
         }
 
         [TestMethod]
-        public void GetAbsolutePath_ValidFileRelativePath_ReturnsAbsolutePath()
+        [DataRow(filePath1)]
+        [DataRow(filePath2)]
+        [DataRow(filePath3)]
+        [DataRow(filePath4)]
+        [DataRow(filePath5)]
+        [DataRow(filePath6)]
+        public void GetAbsolutePath_ValidFileRelativePath_ReturnsAbsolutePath(string testPath)
         {
-            string path = GetAbsolutePath(filePath1);
-            Assert.AreEqual<string>(filePath1, GiftImporter.GetAbsolutePath(filePath1));
+            string expectedPath = Path.Combine(System.Environment.CurrentDirectory, testPath);
+            Assert.AreEqual<string>(expectedPath, GiftsImporter.GetAbsolutePath(testPath));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void GetAbsolutePath_NullPath_ThrowArgumentException()
         {
+            GiftsImporter.GetAbsolutePath(null);
+        }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetAbsolutePath_EmptyPath_ThrowArgumentException()
+        {
+            GiftsImporter.GetAbsolutePath("");
         }
     }
 }

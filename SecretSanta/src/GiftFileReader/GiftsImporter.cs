@@ -25,21 +25,13 @@ namespace SecretSanta.Import
             {
                 throw new ArgumentException("The specified path is null or empty.");
             }
-            else if (File.Exists(path))
+            else if (Path.GetPathRoot(path) == Path.GetPathRoot(System.Environment.CurrentDirectory))
             {
                 return path;
             }
             else
             {
-                string combinedPath = Path.Combine(System.Environment.CurrentDirectory, path);
-                if (File.Exists(combinedPath))
-                {
-                    return combinedPath;
-                }
-                else
-                {
-                    throw new FileNotFoundException("The specified file does not exist.");
-                }
+                return Path.Combine(System.Environment.CurrentDirectory, path);
             }
         }
     }
