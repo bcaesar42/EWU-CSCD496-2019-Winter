@@ -34,5 +34,11 @@ namespace SecretSanta.Import
                 return Path.Combine(System.Environment.CurrentDirectory, path);
             }
         }
+
+        public static bool FileDoesExist(string filePath)
+        {
+            string absolutePath = GetAbsolutePath(filePath);
+            return File.Exists(absolutePath);
+        }
     }
 }

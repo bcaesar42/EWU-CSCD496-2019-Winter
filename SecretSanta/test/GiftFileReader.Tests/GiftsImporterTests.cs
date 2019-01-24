@@ -114,14 +114,7 @@ namespace SecretSanta.Import.Tests
             foreach (string path in filePaths)
             {
                 toDelete = Path.Combine(GlobalPath, path);
-                try
-                {
-                    File.Delete(toDelete);
-                }
-                catch (Exception)
-                {
-
-                }
+                File.Delete(toDelete);
             }
         }
 
@@ -156,6 +149,44 @@ namespace SecretSanta.Import.Tests
         public void GetAbsolutePath_EmptyPath_ThrowArgumentException()
         {
             GiftsImporter.GetAbsolutePath("");
+        }
+
+        [TestMethod]
+        [DataRow(filePath1)]
+        [DataRow(filePath2)]
+        [DataRow(filePath3)]
+        [DataRow(filePath4)]
+        [DataRow(filePath5)]
+        public void FileDoesExist_FileExists_ReturnTrue(string testPath)
+        {
+            Assert.IsTrue(GiftsImporter.FileDoesExist(testPath));
+        }
+
+        [TestMethod]
+        public void FileDoesExist_FileDoesntExist_ReturnFalse()
+        {
+            Assert.IsFalse(GiftsImporter.FileDoesExist(filePath6));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void FileDoesExist_NullPath_ThrowArgumentException()
+        {
+            GiftsImporter.FileDoesExist(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void FileDoesExist_EmptyPath_ThrowArgumentException()
+        {
+            GiftsImporter.FileDoesExist("");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void ReadUser_FileDoesntExist_ThrowFileNotFoundException()
+        {
+            GiftsImporter.ReadUser(filePath6);
         }
     }
 }
