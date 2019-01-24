@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace GiftFileReader
+namespace SecretSanta.Import
 {
-    public class GiftsImporter
+    public static class GiftsImporter
     {
-        public int DetermineUserID(string filePath)
+        /*public static int DetermineUserID(string filePath)
         {
             if (File.Exists(filePath) || 
                 File.Exists(Path.Combine(System.Environment.CurrentDirectory, filePath)))
@@ -17,11 +17,15 @@ namespace GiftFileReader
             }
 
             return 0;
-        }
+        }*/
 
-        public string GetAbsolutePath(string path)
+        public static string GetAbsolutePath(string path)
         {
-            if (File.Exists(path))
+            if (String.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException("The specified path is null or empty.");
+            }
+            else if (File.Exists(path))
             {
                 return path;
             }

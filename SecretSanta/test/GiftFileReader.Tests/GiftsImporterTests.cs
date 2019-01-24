@@ -1,8 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using SecretSanta.Import;
+using SecretSanta.Domain.Models;
+using SecretSanta.Domain.Services;
+using SecretSanta.Domain.Interface;
 
-namespace GiftFileReader.Tests
+namespace SecretSanta.Import.Tests
 {
     [TestClass]
     public class GiftsImporterTests
@@ -31,6 +35,12 @@ namespace GiftFileReader.Tests
             SetupFile3();
             SetupFile4();
             SetupFile5();
+        }
+
+        [TestCleanup]
+        public void CleanupTests()
+        {
+            DeleteTestFiles();
         }
 
         private void SetupFile1()
@@ -124,8 +134,14 @@ namespace GiftFileReader.Tests
         [TestMethod]
         public void GetAbsolutePath_ValidFileRelativePath_ReturnsAbsolutePath()
         {
-            GiftsImporter importer = new GiftsImporter();
-            Assert.AreEqual<string>(filePath1, importer.GetAbsolutePath(filePath1));
+            string path = GetAbsolutePath(filePath1);
+            Assert.AreEqual<string>(filePath1, GiftImporter.GetAbsolutePath(filePath1));
+        }
+
+        [TestMethod]
+        public void GetAbsolutePath_NullPath_ThrowArgumentException()
+        {
+
         }
     }
 }
