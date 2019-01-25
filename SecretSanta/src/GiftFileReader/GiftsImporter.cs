@@ -1,4 +1,6 @@
-﻿using SecretSanta.Domain.Models;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using SecretSanta.Domain.Models;
 using SecretSanta.Domain.Services;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,8 @@ namespace SecretSanta.Import
 {
     public static class GiftsImporter
     {
+        private static DbContextOptions<ApplicationDbContext> Options { get; set; }
+
         public static (string firstName, string lastName) ReadUser(string filePath)
         {
             if (!FileDoesExist(filePath))
@@ -118,8 +122,9 @@ namespace SecretSanta.Import
 
                 List<Gift> gifts = ReadGifts(filePath);
 
-                using (ApplicationDbContext context = new ApplicationDbContext(
-                    new Microsoft.EntityFrameworkCore.DbContextOptions<ApplicationDbContext>()))
+                OpenConnection();
+
+                using (ApplicationDbContext context = new ApplicationDbContext(Options))
                 {
                     UserService userService = new UserService(context);
                     userService.AddUser(user);
@@ -130,6 +135,21 @@ namespace SecretSanta.Import
                         giftService.AddGiftToUser(gift, user.Id);
                     }
                 }
+            }
+        }
+
+        private static void OpenConnection()
+        {
+            SqliteConnection connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            Options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlite(connection)
+                .Options;
+
+            using (var context = new ApplicationDbContext(Options))
+            {
+                context.Database.EnsureCreated();
             }
         }
     }

@@ -274,10 +274,10 @@ namespace SecretSanta.Import.Tests
             //Assert.AreEqual<List<Gift>>(expectedGiftsList, resultList);
         }
 
-      /*[TestMethod]
+        [TestMethod]
         public void ReadGiftsFromFile_ValidFile_NoException()
         {
             GiftsImporter.ReadGiftsFromFile(_filePath1);
-        } */
+        }
     }
 }
