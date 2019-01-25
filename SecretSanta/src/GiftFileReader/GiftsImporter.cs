@@ -7,17 +7,47 @@ namespace SecretSanta.Import
 {
     public static class GiftsImporter
     {
-        /*public static int DetermineUserID(string filePath)
+        public static (string firstName, string lastName) ReadUser(string filePath)
         {
-            if (File.Exists(filePath) || 
-                File.Exists(Path.Combine(System.Environment.CurrentDirectory, filePath)))
+            if (!FileDoesExist(filePath))
             {
-                string header;
-                
+                throw new FileNotFoundException("The specified file doesn't exist.");
             }
 
-            return 0;
-        }*/
+            string[] fileLines = File.ReadAllLines(GetAbsolutePath(filePath));
+
+            if (fileLines.Length < 1)
+            {
+                throw new ArgumentException("The specified file is empty.");
+            }
+
+            return ParseName(fileLines[0]);
+        }
+
+        private static (string firstName, string lastName) ParseName(string header)
+        {
+            string[] splitNames;
+
+            if (header.Contains(","))
+            {
+                splitNames = header.Split(',');
+            }
+            else
+            {
+                splitNames = header.Split();
+            }
+
+            if (splitNames.Length < 2)
+            {
+                throw new ArgumentException("The first line of the file does not contain a first and last name.");
+            }
+
+            if (header.Contains(","))
+            {
+                return (splitNames[1].Trim(), splitNames[0].Trim());
+            }
+            return (splitNames[0].Trim(), splitNames[1].Trim());
+        }
 
         public static string GetAbsolutePath(string path)
         {

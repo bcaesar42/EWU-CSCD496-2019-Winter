@@ -11,12 +11,13 @@ namespace SecretSanta.Import.Tests
     [TestClass]
     public class GiftsImporterTests
     {
-        private const string filePath1 = @".\TestGifts1.txt"; //Standard (multiple gifts)
-        private const string filePath2 = @".\TestGifts2.txt"; //Empty file
-        private const string filePath3 = @".\TestGifts3.txt"; //Backwards name
-        private const string filePath4 = @".\TestGifts4.txt"; //Name, but no text
-        private const string filePath5 = @".\TestGifts5.txt"; //One gift
-        private const string filePath6 = @".\TestGifts6.txt"; //Non-existant file
+        private const string _filePath1 = @".\TestGifts1.txt"; //Standard (multiple gifts)
+        private const string _filePath2 = @".\TestGifts2.txt"; //Empty file
+        private const string _filePath3 = @".\TestGifts3.txt"; //Backwards name
+        private const string _filePath4 = @".\TestGifts4.txt"; //Name, but no text
+        private const string _filePath5 = @".\TestGifts5.txt"; //One gift
+        private const string _filePath6 = @".\TestGifts6.txt"; //Non-existant file
+        private const string _filePath7 = @".\TestGifts7.txt"; //Invalid name in header
 
         private string GlobalPath
         {
@@ -35,6 +36,7 @@ namespace SecretSanta.Import.Tests
             SetupFile3();
             SetupFile4();
             SetupFile5();
+            SetupFile7();
         }
 
         [TestCleanup]
@@ -45,7 +47,7 @@ namespace SecretSanta.Import.Tests
 
         private void SetupFile1()
         {
-            string absolutePath = Path.Combine(GlobalPath, filePath1);
+            string absolutePath = Path.Combine(GlobalPath, _filePath1);
             string[] toWrite = {"Bryan Caesar",
                                 "XBox One_12_A box for gaming._Amazon.com",
                                 "Tesla Model S_9001_An awesome electric car._Tesla.com"};
@@ -60,7 +62,7 @@ namespace SecretSanta.Import.Tests
 
         private void SetupFile2()
         {
-            string absolutePath = Path.Combine(GlobalPath, filePath2);
+            string absolutePath = Path.Combine(GlobalPath, _filePath2);
             using (StreamWriter writer = File.CreateText(absolutePath))
             {
                 //Create empty file.
@@ -69,7 +71,7 @@ namespace SecretSanta.Import.Tests
 
         private void SetupFile3()
         {
-            string absolutePath = Path.Combine(GlobalPath, filePath3);
+            string absolutePath = Path.Combine(GlobalPath, _filePath3);
             string[] toWrite = {"Caesar, Bryan",
                                 "XBox One_12_A box for gaming._Amazon.com",
                                 "Tesla Model S_9001_An awesome electric car._Tesla.com"};
@@ -84,7 +86,7 @@ namespace SecretSanta.Import.Tests
 
         private void SetupFile4()
         {
-            string absolutePath = Path.Combine(GlobalPath, filePath4);
+            string absolutePath = Path.Combine(GlobalPath, _filePath4);
             using (StreamWriter writer = File.CreateText(absolutePath))
             {
                 writer.WriteLine("Human McHumanFace");
@@ -93,8 +95,8 @@ namespace SecretSanta.Import.Tests
 
         private void SetupFile5()
         {
-            string absolutePath = Path.Combine(GlobalPath, filePath5);
-            string[] toWrite = {"John SMith",
+            string absolutePath = Path.Combine(GlobalPath, _filePath5);
+            string[] toWrite = {"John Smith",
                                 "Cheese Burger_2_A tasty snack._BK.com"};
             using (StreamWriter writer = File.CreateText(absolutePath))
             {
@@ -105,10 +107,19 @@ namespace SecretSanta.Import.Tests
             }
         }
 
+        private void SetupFile7()
+        {
+            string absolutePath = Path.Combine(GlobalPath, _filePath7);
+            using (StreamWriter writer = File.CreateText(absolutePath))
+            {
+                writer.WriteLine("InigoMontoya");
+            }
+        }
+
         private void DeleteTestFiles()
         {
-            string[] filePaths = {filePath1, filePath2, filePath3,
-                                  filePath4, filePath5, filePath6};
+            string[] filePaths = {_filePath1, _filePath2, _filePath3,
+                                  _filePath4, _filePath5, _filePath6, _filePath7};
 
             string toDelete;
             foreach (string path in filePaths)
@@ -125,12 +136,12 @@ namespace SecretSanta.Import.Tests
         }
 
         [TestMethod]
-        [DataRow(filePath1)]
-        [DataRow(filePath2)]
-        [DataRow(filePath3)]
-        [DataRow(filePath4)]
-        [DataRow(filePath5)]
-        [DataRow(filePath6)]
+        [DataRow(_filePath1)]
+        [DataRow(_filePath2)]
+        [DataRow(_filePath3)]
+        [DataRow(_filePath4)]
+        [DataRow(_filePath5)]
+        [DataRow(_filePath6)]
         public void GetAbsolutePath_ValidFileRelativePath_ReturnsAbsolutePath(string testPath)
         {
             string expectedPath = Path.Combine(System.Environment.CurrentDirectory, testPath);
@@ -152,11 +163,11 @@ namespace SecretSanta.Import.Tests
         }
 
         [TestMethod]
-        [DataRow(filePath1)]
-        [DataRow(filePath2)]
-        [DataRow(filePath3)]
-        [DataRow(filePath4)]
-        [DataRow(filePath5)]
+        [DataRow(_filePath1)]
+        [DataRow(_filePath2)]
+        [DataRow(_filePath3)]
+        [DataRow(_filePath4)]
+        [DataRow(_filePath5)]
         public void FileDoesExist_FileExists_ReturnTrue(string testPath)
         {
             Assert.IsTrue(GiftsImporter.FileDoesExist(testPath));
@@ -165,7 +176,7 @@ namespace SecretSanta.Import.Tests
         [TestMethod]
         public void FileDoesExist_FileDoesntExist_ReturnFalse()
         {
-            Assert.IsFalse(GiftsImporter.FileDoesExist(filePath6));
+            Assert.IsFalse(GiftsImporter.FileDoesExist(_filePath6));
         }
 
         [TestMethod]
@@ -186,7 +197,41 @@ namespace SecretSanta.Import.Tests
         [ExpectedException(typeof(FileNotFoundException))]
         public void ReadUser_FileDoesntExist_ThrowFileNotFoundException()
         {
-            GiftsImporter.ReadUser(filePath6);
+            GiftsImporter.ReadUser(_filePath6);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ReadUser_EmptyFile_ThrowArgumentException()
+        {
+            GiftsImporter.ReadUser(_filePath2);
+        }
+
+        [TestMethod]
+        [DataRow(_filePath1, "Bryan", "Caesar")]
+        [DataRow(_filePath4, "Human", "McHumanFace")]
+        [DataRow(_filePath5, "John", "Smith")]
+        public void ReadUser_FirstNameThenLastName_ReturnsName(
+                string filePath, string expectedFirst, string expectedLast)
+        {
+            (string first, string last) result = GiftsImporter.ReadUser(filePath);
+            Assert.AreEqual<string>(expectedFirst, result.first);
+            Assert.AreEqual<string>(expectedLast, result.last);
+        }
+
+        [TestMethod]
+        public void ReadUser_LastNameThenFirstName_ReturnsName()
+        {
+            (string first, string last) result = GiftsImporter.ReadUser(_filePath3);
+            Assert.AreEqual<string>("Bryan", result.first);
+            Assert.AreEqual<string>("Caesar", result.last);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ReadUser_InvalidNameInHeader_ThrowArgumentException()
+        {
+            GiftsImporter.ReadUser(_filePath7);
         }
     }
 }
