@@ -5,6 +5,7 @@ using SecretSanta.Import;
 using SecretSanta.Domain.Models;
 using SecretSanta.Domain.Services;
 using SecretSanta.Domain.Interface;
+using System.Collections.Generic;
 
 namespace SecretSanta.Import.Tests
 {
@@ -233,5 +234,50 @@ namespace SecretSanta.Import.Tests
         {
             GiftsImporter.ReadUser(_filePath7);
         }
+
+        [TestMethod]
+        public void ReadGifts_TwoGiftsInFile_ReturnTwoGifts()
+        {
+          /*Gift expectedGift1 = new Gift
+            {
+                Title = "XBox One",
+                User = new User
+                {
+                    FirstName = "Bryan",
+                    LastName = "Caesar"
+                },
+                Importance = 12,
+                Description = "A box for gaming.",
+                URL = "Amazon.com"
+            };
+
+            Gift expectedGift2 = new Gift
+            {
+                Title = "Tesla Model S",
+                User = new User
+                {
+                    FirstName = "Bryan",
+                    LastName = "Caesar"
+                },
+                Importance = 9001,
+                Description = "An awesome electric car.",
+                URL = "Tesla.com"
+            };
+
+            List<Gift> expectedGiftsList = new List<Gift>();
+            expectedGiftsList.Add(expectedGift1);
+            expectedGiftsList.Add(expectedGift2); */
+
+            List<Gift> resultList = GiftsImporter.ReadGifts(_filePath1);
+
+            Assert.AreEqual<int>(2, resultList.Count);
+            //Assert.AreEqual<List<Gift>>(expectedGiftsList, resultList);
+        }
+
+      /*[TestMethod]
+        public void ReadGiftsFromFile_ValidFile_NoException()
+        {
+            GiftsImporter.ReadGiftsFromFile(_filePath1);
+        } */
     }
 }

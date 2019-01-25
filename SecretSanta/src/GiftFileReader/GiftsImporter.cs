@@ -1,4 +1,5 @@
 ﻿using SecretSanta.Domain.Models;
+using SecretSanta.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -69,6 +70,67 @@ namespace SecretSanta.Import
         {
             string absolutePath = GetAbsolutePath(filePath);
             return File.Exists(absolutePath);
+        }
+
+        public static List<Gift> ReadGifts(string filePath)
+        {
+            if (FileDoesExist(filePath))
+            {
+                string[] lines = File.ReadAllLines(GetAbsolutePath(filePath));
+                (string firstName, string lastName) user = ReadUser(filePath);
+                List<Gift> toReturn = new List<Gift>();
+                string[] giftText;
+                Gift gift;
+
+                for (int index = 1; index < lines.Length; index++)
+                {
+                    giftText = lines[index].Split('_');
+                    gift = new Gift
+                    {
+                        Title = giftText[0],
+                        User = new User
+                        {
+                            FirstName = user.firstName,
+                            LastName = user.lastName
+                        },
+                        Importance = int.Parse(giftText[1]),
+                        Description = giftText[2],
+                        URL = giftText[3]
+                    };
+                    toReturn.Add(gift);
+                }
+
+                return toReturn;
+            }
+            return null;
+        }
+
+        public static void ReadGiftsFromFile(string filePath)
+        {
+            if (FileDoesExist(filePath))
+            {
+                (string firstName, string lastName) userNames = ReadUser(filePath);
+                User user = new User
+                {
+                    FirstName = userNames.firstName,
+                    LastName = userNames.lastName
+                };
+
+                List<Gift> gifts = ReadGifts(filePath);
+
+                using (ApplicationDbContext context = new ApplicationDbContext(
+                    new Microsoft.EntityFrameworkCore.DbContextOptions<ApplicationDbContext>()))
+                {
+                    UserService userService = new UserService(context);
+                    userService.AddUser(user);
+
+                    GiftService giftService = new GiftService(context);
+                    foreach (Gift gift in gifts)
+                    {
+                        giftService.AddGiftToUser(gift, user.Id);
+                    }
+                }
+            }
         }
     }
 }
