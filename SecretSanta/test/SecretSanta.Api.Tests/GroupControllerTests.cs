@@ -45,5 +45,33 @@ namespace SecretSanta.Api.Tests
             //This check ensures that the service was called
             Assert.AreEqual<int>(42, testService.AddGroup_Group.Id);
         }
+
+        [TestMethod]
+        public void UpdateGroup_RequiresGroup()
+        {
+            var testService = new TestableGroupService();
+            var controller = new GroupController(testService);
+
+            ActionResult result = controller.UpdateGroup(null);
+
+            Assert.IsTrue(result is BadRequestResult);
+            //This check ensures that the service was not called
+            Assert.IsNull(testService.UpdateGroup_Group);
+        }
+
+        [TestMethod]
+        public void UpdateGroup_InvokesService()
+        {
+            var testService = new TestableGroupService();
+            var controller = new GroupController(testService);
+
+            Group group = new Group { Id = 42 };
+
+            ActionResult result = controller.UpdateGroup(group);
+
+            Assert.IsTrue(result is OkResult);
+            //This check ensures that the service was called
+            Assert.AreEqual<int>(42, testService.UpdateGroup_Group.Id);
+        }
     }
 }
