@@ -7,5 +7,7 @@ namespace SecretSanta.Domain.Services
     {
         List<Gift> GetGiftsForUser(int userId);
         Gift AddGiftToUser(int userId, Gift gift);
+        Models.Gift UpdateGiftForUser(int userId, Models.Gift gift);
+        void RemoveGift(Models.Gift gift);
     }
 }

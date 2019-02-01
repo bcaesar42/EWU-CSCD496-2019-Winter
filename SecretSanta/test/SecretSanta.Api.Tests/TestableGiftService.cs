@@ -28,5 +28,25 @@ namespace SecretSanta.Api.Tests
 
             return AddGiftToUser_Return;
         }
+
+        public Gift UpdateGiftForUser_Return { get; set; }
+
+        public int UpdateGiftForUser_UserId { get; set; }
+        public Gift UpdateGiftForUser_Gift { get; set; }
+
+        public Gift UpdateGiftForUser(int userId, Gift gift)
+        {
+            UpdateGiftForUser_UserId = userId;
+            UpdateGiftForUser_Gift = gift;
+
+            return UpdateGiftForUser_Return;
+        }
+
+        public Gift RemoveGift_Gift { get; set; }
+
+        public void RemoveGift(Gift gift)
+        {
+            RemoveGift_Gift = gift;
+        }
     }
 }
