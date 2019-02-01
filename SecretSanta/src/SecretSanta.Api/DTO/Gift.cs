@@ -17,7 +17,7 @@ namespace SecretSanta.Api.DTO
 
         public Gift(SecretSanta.Domain.Models.Gift gift)
         {
-            if (gift == null) throw new ArgumentNullException(nameof(gift));
+            if (gift is null) throw new ArgumentNullException(nameof(gift));
 
             Id = gift.Id;
             Title = gift.Title;
@@ -28,8 +28,16 @@ namespace SecretSanta.Api.DTO
 
         public static SecretSanta.Domain.Models.Gift ToEntity(DTO.Gift gift)
         {
-            //Pretend this is implemented
-            return null;
+            Domain.Models.Gift giftModel = new Domain.Models.Gift()
+            {
+                Id = gift.Id,
+                Title = gift.Title,
+                Description = gift.Description,
+                OrderOfImportance = gift.OrderOfImportance,
+                Url = gift.Url
+            };
+
+            return giftModel;
         }
     }
 }

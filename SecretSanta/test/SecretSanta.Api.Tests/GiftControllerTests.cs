@@ -39,13 +39,13 @@ namespace SecretSanta.Api.Tests
 
             ActionResult<List<DTO.Gift>> result = controller.GetGiftForUser(4);
 
-            Assert.AreEqual(4, testService.GetGiftsForUser_UserId);
+            Assert.AreEqual<int>(4, testService.GetGiftsForUser_UserId);
             DTO.Gift resultGift = result.Value.Single();
-            Assert.AreEqual(gift.Id, resultGift.Id);
-            Assert.AreEqual(gift.Title, resultGift.Title);
-            Assert.AreEqual(gift.Description, resultGift.Description);
-            Assert.AreEqual(gift.Url, resultGift.Url);
-            Assert.AreEqual(gift.OrderOfImportance, resultGift.OrderOfImportance);
+            Assert.AreEqual<int>(gift.Id, resultGift.Id);
+            Assert.AreEqual<string>(gift.Title, resultGift.Title);
+            Assert.AreEqual<string>(gift.Description, resultGift.Description);
+            Assert.AreEqual<string>(gift.Url, resultGift.Url);
+            Assert.AreEqual<int>(gift.OrderOfImportance, resultGift.OrderOfImportance);
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace SecretSanta.Api.Tests
             
             Assert.IsTrue(result.Result is NotFoundResult);
             //This check ensures that the service was not called
-            Assert.AreEqual(0, testService.GetGiftsForUser_UserId);
+            Assert.AreEqual<int>(0, testService.GetGiftsForUser_UserId);
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace SecretSanta.Api.Tests
 
             Assert.IsTrue(result is BadRequestResult);
             //This check ensures that the controller does not AddGitToUser on the service
-            Assert.AreEqual(0, testService.AddGiftToUser_UserId);
+            Assert.AreEqual<int>(0, testService.AddGiftToUser_UserId);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace SecretSanta.Api.Tests
             OkResult okResult = result as OkResult;
 
             Assert.IsNotNull(result, "Result was not a 200");
-            Assert.AreEqual(4, testService.AddGiftToUser_UserId);
+            Assert.AreEqual<int>(4, testService.AddGiftToUser_UserId);
         }
     }
 }
