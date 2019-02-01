@@ -129,7 +129,6 @@ namespace SecretSanta.Api.Tests
             ActionResult result = controller.RemoveGift(null);
 
             Assert.IsTrue(result is BadRequestResult);
-            //This check ensures that the controller does not AddGitToUser on the service
             Assert.AreEqual<int>(0, testService.RemoveGift_Gift.Id);
         }
 

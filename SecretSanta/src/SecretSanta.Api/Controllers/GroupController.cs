@@ -9,11 +9,11 @@ namespace SecretSanta.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupCintroller : ControllerBase
+    public class GroupController : ControllerBase
     {
         private readonly IGroupService _GroupService;
 
-        public GroupCintroller(IGroupService groupService)
+        public GroupController(IGroupService groupService)
         {
             _GroupService = groupService ?? throw new ArgumentNullException(nameof(groupService));
         }
