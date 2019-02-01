@@ -26,21 +26,41 @@ namespace SecretSanta.Api.Controllers
             return databaseGroups.Select(x => new DTO.Group(x)).ToList();
         }
 
-        [HttpPost("{userId}")]
-        public ActionResult AddGroup(DTO.Group group, int userId)
+        [HttpPost]
+        public ActionResult AddGroup(DTO.Group group)
         {
-            if (userId <= 0)
-            {
-                return NotFound();
-            }
-
-            if (group == null)
+            if (group is null)
             {
                 return BadRequest();
             }
 
             _GroupService.AddGroup(DTO.Group.ToEntity(group));
             return Ok();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateGroup(DTO.Group group)
+        {
+            if (group is null)
+            {
+                return BadRequest();
+            }
+
+            _GroupService.UpdateGroup(DTO.Group.ToEntity(group));
+            return Ok();
+        }
+
+        [HttpPost]
+        public ActionResult<List<DTO.User>> GetUsers(int groupId)
+        {
+            if (groupId <= 0)
+            {
+                return NotFound();
+            }
+
+            List<User> databaseUsers = _GroupService.GetUsers(groupId);
+
+            return databaseUsers.Select(x => new DTO.User(x)).ToList();
         }
     }
 }

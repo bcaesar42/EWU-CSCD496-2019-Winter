@@ -50,5 +50,34 @@ namespace SecretSanta.Api.Controllers
 
             //return databaseUsers.Select(x => new DTO.Gift(x)).ToList();
         }
+
+        [HttpPost("{userId}")]
+        public ActionResult UpdateGiftForUser(int userId, DTO.Gift gift)
+        {
+            if (userId <= 0)
+            {
+                return NotFound();
+            }
+
+            if (gift == null)
+            {
+                return BadRequest();
+            }
+
+            _GiftService.UpdateGiftForUser(userId, DTO.Gift.ToEntity(gift));
+            return Ok();
+        }
+
+        [HttpDelete]
+        public ActionResult RemoveGift(DTO.Gift gift)
+        {
+            if (gift is null)
+            {
+                return BadRequest();
+            }
+
+            _GiftService.RemoveGift(DTO.Gift.ToEntity(gift));
+            return Ok();
+        }
     }
 }
