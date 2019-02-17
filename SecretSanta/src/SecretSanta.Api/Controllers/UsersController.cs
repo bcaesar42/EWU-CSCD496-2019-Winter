@@ -28,16 +28,17 @@ namespace SecretSanta.Api.Controllers
         // GET api/User
         [HttpGet]
         [Produces(typeof(ICollection<UserViewModel>))]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(UserService.FetchAll().Select(x => Mapper.Map<UserViewModel>(x)));
+            List<User> fetched = await UserService.FetchAll();
+            return Ok(fetched.Select(x => Mapper.Map<UserViewModel>(x)));
         }
 
         [HttpGet("{id}")]
         [Produces(typeof(UserViewModel))]
         public IActionResult Get(int id)
         {
-            var fetchedUser = UserService.GetById(id);
+            Task<User> fetchedUser = UserService.GetById(id);
             if (fetchedUser == null)
             {
                 return NotFound();
@@ -56,40 +57,40 @@ namespace SecretSanta.Api.Controllers
                 return BadRequest();
             }
 
-            var createdUser = UserService.AddUser(Mapper.Map<User>(viewModel));
+            Task<User> createdUser = UserService.AddUser(Mapper.Map<User>(viewModel));
 
             return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, Mapper.Map<UserViewModel>(createdUser));
         }
 
         // PUT api/User/5
         [HttpPut]
-        public IActionResult Put(int id, UserInputViewModel viewModel)
+        public async Task<IActionResult> Put(int id, UserInputViewModel viewModel)
         {
             if (viewModel == null)
             {
                 return BadRequest();
             }
-            var fetchedUser = UserService.GetById(id);
+            User fetchedUser = await UserService.GetById(id);
             if (fetchedUser == null)
             {
                 return NotFound();
             }
 
             Mapper.Map(viewModel, fetchedUser);
-            UserService.UpdateUser(fetchedUser);
+            await UserService.UpdateUser(fetchedUser);
             return NoContent();
         }
 
         // DELETE api/User/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
             {
                 return BadRequest("A User id must be specified");
             }
 
-            if (UserService.DeleteUser(id))
+            if (await UserService.DeleteUser(id))
             {
                 return Ok();
             }
