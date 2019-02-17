@@ -55,7 +55,7 @@ namespace SecretSanta.Api.Controllers
             {
                 return BadRequest();
             }
-            var createdGroup = GroupService.AddGroup(Mapper.Map<Group>(viewModel));
+            var createdGroup = GroupService.AddGroupAsync(Mapper.Map<Group>(viewModel));
             return CreatedAtAction(nameof(Get), new { id = createdGroup.Id}, Mapper.Map<GroupViewModel>(createdGroup));
         }
 
