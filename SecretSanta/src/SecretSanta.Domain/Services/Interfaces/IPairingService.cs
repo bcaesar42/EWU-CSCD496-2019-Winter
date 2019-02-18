@@ -7,6 +7,6 @@ namespace SecretSanta.Domain.Services.Interfaces
 {
     public interface IPairingService
     {
-        Task<bool> GeneratePairings(int groupID);
+        Task<bool> GeneratePairings(int groupId);
     }
 }
