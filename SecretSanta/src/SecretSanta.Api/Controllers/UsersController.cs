@@ -36,9 +36,9 @@ namespace SecretSanta.Api.Controllers
 
         [HttpGet("{id}")]
         [Produces(typeof(UserViewModel))]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            Task<User> fetchedUser = UserService.GetById(id);
+            User fetchedUser = await UserService.GetById(id);
             if (fetchedUser == null)
             {
                 return NotFound();
@@ -50,14 +50,14 @@ namespace SecretSanta.Api.Controllers
         // POST api/User
         [HttpPost]
         [Produces(typeof(UserViewModel))]
-        public IActionResult Post(UserInputViewModel viewModel)
+        public async Task<IActionResult> Post(UserInputViewModel viewModel)
         {
             if (User == null)
             {
                 return BadRequest();
             }
 
-            Task<User> createdUser = UserService.AddUser(Mapper.Map<User>(viewModel));
+            User createdUser = await UserService.AddUser(Mapper.Map<User>(viewModel));
 
             return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, Mapper.Map<UserViewModel>(createdUser));
         }
