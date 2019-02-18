@@ -13,8 +13,8 @@ namespace SecretSanta.Domain.Services
     public class PairingService : IPairingService
     {
         private ApplicationDbContext DbContext { get; }
-        private Random Random { get; } = new Random();
-        private readonly object _LockKey = new object();
+        //private Random Random { get; } = new Random();
+        //private readonly object _LockKey = new object();
 
         public PairingService(ApplicationDbContext dbContext)
         {
@@ -46,13 +46,13 @@ namespace SecretSanta.Domain.Services
         {
             int index;
 
-            //Random random = new Random();
-            //index = random.Next(userIds.Count);
+            Random random = new Random();
+            index = random.Next(userIds.Count);
 
-            lock(_LockKey)
-            {
-                index = Random.Next(userIds.Count);
-            }
+            //lock (_LockKey)
+            //{
+            //    index = Random.Next(userIds.Count);
+            //}
 
             List<Pairing> pairings = new List<Pairing>();
 
