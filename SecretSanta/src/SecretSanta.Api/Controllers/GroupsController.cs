@@ -37,9 +37,9 @@ namespace SecretSanta.Api.Controllers
 
         [HttpGet("{id}")]
         [Produces(typeof(GroupViewModel))]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            Task<Group> group = GroupService.GetById(id);
+            Group group = await GroupService.GetById(id);
             if (group == null)
             {
                 return NotFound();
@@ -51,13 +51,13 @@ namespace SecretSanta.Api.Controllers
         // POST api/group
         [HttpPost]
         [Produces(typeof(GroupViewModel))]
-        public IActionResult Post(GroupInputViewModel viewModel)
+        public async Task<IActionResult> Post(GroupInputViewModel viewModel)
         {
             if (viewModel == null)
             {
                 return BadRequest();
             }
-            Task<Group> createdGroup = GroupService.AddGroupAsync(Mapper.Map<Group>(viewModel));
+            Group createdGroup = await GroupService.AddGroupAsync(Mapper.Map<Group>(viewModel));
             return CreatedAtAction(nameof(Get), new { id = createdGroup.Id}, Mapper.Map<GroupViewModel>(createdGroup));
         }
 
