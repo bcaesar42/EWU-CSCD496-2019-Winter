@@ -1,0 +1,8 @@
+﻿<h1 class="title">Tags</h1>
+<ul>
+    @foreach (var user in ViewBag.Tags)
+    {
+        <li>@user.Name</li>
+    }
+</ul>
+<a asp-controller="Tags" asp-action="Add" class="button is-primary">Add Tag</a>

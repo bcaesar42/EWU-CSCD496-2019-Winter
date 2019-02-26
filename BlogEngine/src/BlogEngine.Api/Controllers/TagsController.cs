@@ -39,7 +39,7 @@ namespace BlogEngine.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TagViewModel>> CreateUser(TagInputViewModel viewModel)
+        public async Task<ActionResult<TagViewModel>> CreateTag(TagInputViewModel viewModel)
         {
             var createdTag = await TagService.CreateTag(Mapper.Map<Tag>(viewModel));
 
