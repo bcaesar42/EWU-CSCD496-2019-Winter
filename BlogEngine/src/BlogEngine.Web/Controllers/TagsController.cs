@@ -21,8 +21,8 @@ namespace BlogEngine.Web.Controllers
         {
             using (var httpClient = ClientFactory.CreateClient("BlogEngineApi"))
             {
-                var secretSantaClient = new BlogEngineApiClient(httpClient.BaseAddress.ToString(), httpClient);
-                ViewBag.Tags = await secretSantaClient.GetTagsAsync();
+                var blogEngineClient = new BlogEngineApiClient(httpClient.BaseAddress.ToString(), httpClient);
+                ViewBag.Tags = await blogEngineClient.GetTagsAsync();
             }
             return View();
         }
@@ -43,8 +43,8 @@ namespace BlogEngine.Web.Controllers
                 {
                     try
                     {
-                        var secretSantaClient = new BlogEngineApiClient(httpClient.BaseAddress.ToString(), httpClient);
-                        await secretSantaClient.CreateTagAsync(viewModel);
+                        var blogEngineClient = new BlogEngineApiClient(httpClient.BaseAddress.ToString(), httpClient);
+                        await blogEngineClient.CreateTagAsync(viewModel);
 
                         result = RedirectToAction(nameof(Index));
                     }

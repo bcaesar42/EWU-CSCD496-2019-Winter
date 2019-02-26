@@ -41,5 +41,15 @@ namespace BlogEngine.Domain.Services
 
             return user;
         }
+
+        public async Task DeleteUser(int userId)
+        {
+            var foundUser = await DbContext.Users.FindAsync(userId);
+            if (foundUser != null)
+            {
+                DbContext.Users.Remove(foundUser);
+                await DbContext.SaveChangesAsync();
+            }
+        }
     }
 }

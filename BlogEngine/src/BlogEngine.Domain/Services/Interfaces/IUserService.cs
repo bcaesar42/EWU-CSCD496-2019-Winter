@@ -10,5 +10,6 @@ namespace BlogEngine.Domain.Services.Interfaces
         Task<ICollection<User>> GetAllUsers();
         Task<User> CreateUser(User user);
         Task<User> UpdateUser(User user);
+        Task DeleteUser(int userId);
     }
 }

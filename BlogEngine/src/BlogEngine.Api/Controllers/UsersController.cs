@@ -44,7 +44,7 @@ namespace BlogEngine.Api.Controllers
         {
             var createdUser = await UserService.CreateUser(Mapper.Map<User>(viewModel));
 
-            return CreatedAtAction(nameof(GetUserById), new {id = createdUser.Id}, createdUser);
+            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
 
         [HttpPut]
@@ -61,6 +61,13 @@ namespace BlogEngine.Api.Controllers
             await UserService.UpdateUser(userToUpdate);
 
             return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            await UserService.DeleteUser(id);
+            return Ok();
         }
     }
 }
