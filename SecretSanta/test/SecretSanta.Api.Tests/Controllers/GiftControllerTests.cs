@@ -19,6 +19,7 @@ namespace SecretSanta.Api.Tests.Controllers
         [AssemblyInitialize]
         public static void ConfigureAutoMapper(TestContext context)
         {
+            var needThisToCompileForSomeReason = context;
             Mapper.Initialize(cfg => cfg.AddProfile(new AutoMapperProfileConfiguration()));
         }
 
