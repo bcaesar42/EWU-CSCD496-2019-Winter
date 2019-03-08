@@ -5,11 +5,13 @@ using SecretSanta.Api.Controllers;
 using SecretSanta.Api.Models;
 using SecretSanta.Api.ViewModels;
 using SecretSanta.Domain.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog.Events;
 
 namespace SecretSanta.Api.Tests.Controllers
 {
