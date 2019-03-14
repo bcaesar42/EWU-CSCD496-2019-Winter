@@ -12,7 +12,7 @@ namespace SecretSanta.Web.UITests
     [TestClass]
     public class GroupPageTests
     {
-        private const string RootUrl = "https://localhost:44331/";
+        private const string RootUrl = "https://localhost:44323/";
 
         private IWebDriver Driver { get; set; }
 
@@ -25,8 +25,8 @@ namespace SecretSanta.Web.UITests
         [TestCleanup]
         public void Cleanup()
         {
-            //Driver.Quit();
-            //Driver.Dispose();
+            Driver?.Quit();
+            Driver?.Dispose();
         }
 
         [TestMethod]
