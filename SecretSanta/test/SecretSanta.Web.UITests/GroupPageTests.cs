@@ -82,6 +82,8 @@ namespace SecretSanta.Web.UITests
             IWebElement deleteLink = page.GetDeleteLink(groupName);
             deleteLink.Click();
 
+            Driver.SwitchTo().Alert().Accept();
+
             //Assert
             List<string> groupNames = page.GroupNames;
             Assert.IsFalse(groupNames.Contains(groupName));
@@ -153,7 +155,7 @@ namespace SecretSanta.Web.UITests
             ReadOnlyCollection<IWebElement> deleteLinks = 
                 Driver.FindElements(By.CssSelector("a.is-danger"));
 
-            return deleteLinks.Single(x => x.GetAttribute("onclick").EndsWith($"{groupName}')"));
+            return deleteLinks.Single(x => x.GetAttribute("onclick").EndsWith($"{groupName}?')"));
         }
 
         public GroupsPage(IWebDriver driver)
