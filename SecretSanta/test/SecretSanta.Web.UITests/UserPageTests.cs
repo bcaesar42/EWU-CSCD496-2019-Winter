@@ -149,6 +149,23 @@ namespace SecretSanta.Web.UITests
             DeleteUser(userNewFirstName, userNewLastName);
         }
 
+        [TestMethod]
+        public void UsersPageListsUsers()
+        {
+            //Arrange /Act
+            string userFirstName = "User First Name" + Guid.NewGuid().ToString("N");
+            string userLastName = "User Last Name" + Guid.NewGuid().ToString("N");
+            UsersPage page = CreateUser(userFirstName, userLastName);
+
+            //Assert
+            Assert.IsTrue(Driver.Url.EndsWith(UsersPage.Slug));
+            List<string> userNames = page.UserNames;
+            Assert.IsTrue(userNames.Count > 0);
+
+            // Cleanup
+            DeleteUser(userFirstName, userLastName);
+        }
+
         private UsersPage CreateUser(string userFirstName, string userLastName)
         {
             var rootUri = new Uri(RootUrl);
