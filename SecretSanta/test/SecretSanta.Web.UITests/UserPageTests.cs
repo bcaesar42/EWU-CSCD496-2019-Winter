@@ -71,6 +71,9 @@ namespace SecretSanta.Web.UITests
             Assert.IsTrue(Driver.Url.EndsWith(UsersPage.Slug));
             List<string> userNames = page.UserNames;
             Assert.IsTrue(userNames.Contains($"{userFirstName} {userLastName}"));
+
+            // Cleanup
+            DeleteUser(userFirstName, userLastName);
         }
 
         [TestMethod]
@@ -105,7 +108,11 @@ namespace SecretSanta.Web.UITests
             page.GetEditLink(userFirstName, userLastName).Click();
 
             //Assert
+            //Assert.AreEqual<string>($"https://localhost:44302/{EditUsersPage.Slug}/{createdUserId}", Driver.Url);
             Assert.IsTrue(Driver.Url.EndsWith($"{EditUsersPage.Slug}/{createdUserId}"));
+
+            // Cleanup
+            DeleteUser(userFirstName, userLastName);
         }
 
         [TestMethod]
@@ -124,8 +131,12 @@ namespace SecretSanta.Web.UITests
             //Act
             EditUsersPage editUsersPage = new EditUsersPage(Driver);
 
+            editUsersPage.UserFirstNameTextBox.Clear();
             editUsersPage.UserFirstNameTextBox.SendKeys(userNewFirstName);
+
+            editUsersPage.UserLastNameTextBox.Clear();
             editUsersPage.UserLastNameTextBox.SendKeys(userNewLastName);
+
             editUsersPage.SubmitButton.Click();
 
             //Assert
@@ -133,6 +144,9 @@ namespace SecretSanta.Web.UITests
             List<string> userNames = page.UserNames;
             Assert.IsTrue(userNames.Contains($"{userNewFirstName} {userNewLastName}"));
             Assert.IsFalse(userNames.Contains($"{userOriginalFirstName} {userOriginalLastName}"));
+
+            // Cleanup
+            DeleteUser(userNewFirstName, userNewLastName);
         }
 
         private UsersPage CreateUser(string userFirstName, string userLastName)
@@ -148,6 +162,23 @@ namespace SecretSanta.Web.UITests
             addUserPage.UserLastNameTextBox.SendKeys(userLastName);
             addUserPage.SubmitButton.Click();
             return page;
+        }
+
+        private void DeleteUser(string firstName, string lastName)
+        {
+            var page = new UsersPage(Driver);
+            try
+            {
+                IWebElement deleteLink = page.GetDeleteLink(firstName, lastName);
+                deleteLink.Click();
+
+                Driver.SwitchTo().Alert().Accept();
+            }
+            catch
+            {
+                // Left blank because this method is only for test cleanup,
+                // and cleanup should not interfer with the tests.
+            }
         }
     }
 }

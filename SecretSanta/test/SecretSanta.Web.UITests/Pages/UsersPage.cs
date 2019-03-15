@@ -48,20 +48,15 @@ namespace SecretSanta.Web.UITests.Pages
 
         public IWebElement GetEditLink(string userFirstName, string userLastName)
         {
-            ReadOnlyCollection<IWebElement> editLinks =
-                Driver.FindElements(By.CssSelector("li a[href^=\"/Users/Edit/\"].button"));
+            string userId = GetUserId(userFirstName, userLastName);
 
-            IWebElement deleteLink = GetDeleteLink(userFirstName, userLastName);
-            string userId = deleteLink.GetCssValue("href").Split('/').Last<string>();
-
-            return editLinks.Single(x => x.GetAttribute("href")
-                              .EndsWith($"/Users/Edit/{userId}"));
+            return Driver.FindElement(By.CssSelector($"ul>li>a[href^=\"/Users/Edit/{userId}\"].button"));
         }
 
         public string GetUserId(string userFirstName, string userLastName)
         {
             IWebElement deleteLink = GetDeleteLink(userFirstName, userLastName);
-            return deleteLink.GetCssValue("href").Split('/').Last<string>();
+            return deleteLink.GetAttribute("href").Split('/').Last<string>();
         }
 
         public UsersPage(IWebDriver driver)
