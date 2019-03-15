@@ -92,6 +92,49 @@ namespace SecretSanta.Web.UITests
             Assert.IsFalse(userNames.Contains($"{userFirstName} {userLastName}"));
         }
 
+        [TestMethod]
+        public void CanNavigateToEditUsersPage()
+        {
+            //Arrange
+            string userFirstName = "User First Name" + Guid.NewGuid().ToString("N");
+            string userLastName = "User Last Name" + Guid.NewGuid().ToString("N");
+            UsersPage page = CreateUser(userFirstName, userLastName);
+            string createdUserId = page.GetUserId(userFirstName, userLastName);
+
+            //Act
+            page.GetEditLink(userFirstName, userLastName).Click();
+
+            //Assert
+            Assert.IsTrue(Driver.Url.EndsWith($"{EditUsersPage.Slug}/{createdUserId}"));
+        }
+
+        [TestMethod]
+        public void CanEditUsers()
+        {
+            //Arrange
+            string userOriginalFirstName = "User First Name" + Guid.NewGuid().ToString("N");
+            string userOriginalLastName = "User Last Name" + Guid.NewGuid().ToString("N");
+            UsersPage page = CreateUser(userOriginalFirstName, userOriginalLastName);
+            string createdUserId = page.GetUserId(userOriginalFirstName, userOriginalLastName);
+            string userNewFirstName = "User First Name" + Guid.NewGuid().ToString("N");
+            string userNewLastName = "User Last Name" + Guid.NewGuid().ToString("N");
+
+            page.GetEditLink(userOriginalFirstName, userOriginalLastName).Click();
+
+            //Act
+            EditUsersPage editUsersPage = new EditUsersPage(Driver);
+
+            editUsersPage.UserFirstNameTextBox.SendKeys(userNewFirstName);
+            editUsersPage.UserLastNameTextBox.SendKeys(userNewLastName);
+            editUsersPage.SubmitButton.Click();
+
+            //Assert
+            Assert.IsTrue(Driver.Url.EndsWith(UsersPage.Slug));
+            List<string> userNames = page.UserNames;
+            Assert.IsTrue(userNames.Contains($"{userNewFirstName} {userNewLastName}"));
+            Assert.IsFalse(userNames.Contains($"{userOriginalFirstName} {userOriginalLastName}"));
+        }
+
         private UsersPage CreateUser(string userFirstName, string userLastName)
         {
             var rootUri = new Uri(RootUrl);

@@ -15,7 +15,7 @@ namespace SecretSanta.Web.UITests.Pages
 
         public IWebElement AddUser => Driver.FindElement(By.LinkText("Add User"));
 
-        public AddGroupsPage AddGroupsPage => new AddGroupsPage(Driver);
+        public AddUsersPage AddUsersPage => new AddUsersPage(Driver);
 
         public List<string> UserNames
         {
@@ -44,6 +44,24 @@ namespace SecretSanta.Web.UITests.Pages
 
             return deleteLinks.Single(x => x.GetAttribute("onclick")
                               .EndsWith($"{userFirstName} {userLastName}?')"));
+        }
+
+        public IWebElement GetEditLink(string userFirstName, string userLastName)
+        {
+            ReadOnlyCollection<IWebElement> editLinks =
+                Driver.FindElements(By.CssSelector("li a[href^=\"/Users/Edit/\"].button"));
+
+            IWebElement deleteLink = GetDeleteLink(userFirstName, userLastName);
+            string userId = deleteLink.GetCssValue("href").Split('/').Last<string>();
+
+            return editLinks.Single(x => x.GetAttribute("href")
+                              .EndsWith($"/Users/Edit/{userId}"));
+        }
+
+        public string GetUserId(string userFirstName, string userLastName)
+        {
+            IWebElement deleteLink = GetDeleteLink(userFirstName, userLastName);
+            return deleteLink.GetCssValue("href").Split('/').Last<string>();
         }
 
         public UsersPage(IWebDriver driver)
