@@ -7,17 +7,17 @@ using System.Text;
 
 namespace SecretSanta.Web.UITests.Pages
 {
-    public class GroupsPage
+    public class UsersPage
     {
-        public const string Slug = "Groups";
+        public const string Slug = "Userss";
 
         public IWebDriver Driver { get; }
 
-        public IWebElement AddGroup => Driver.FindElement(By.LinkText("Add Group"));
+        public IWebElement AddUser => Driver.FindElement(By.LinkText("Add User"));
 
         public AddGroupsPage AddGroupsPage => new AddGroupsPage(Driver);
 
-        public List<string> GroupNames
+        public List<string> UserNames
         {
             get
             {
@@ -37,15 +37,16 @@ namespace SecretSanta.Web.UITests.Pages
             }
         }
 
-        public IWebElement GetDeleteLink(string groupName)
+        public IWebElement GetDeleteLink(string userFirstName, string userLastName)
         {
             ReadOnlyCollection<IWebElement> deleteLinks =
                 Driver.FindElements(By.CssSelector("a.is-danger"));
 
-            return deleteLinks.Single(x => x.GetAttribute("onclick").EndsWith($"{groupName}?')"));
+            return deleteLinks.Single(x => x.GetAttribute("onclick")
+                              .EndsWith($"{userFirstName} {userLastName}?')"));
         }
 
-        public GroupsPage(IWebDriver driver)
+        public UsersPage(IWebDriver driver)
         {
             Driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
