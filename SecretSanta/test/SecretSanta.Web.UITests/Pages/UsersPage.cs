@@ -9,7 +9,7 @@ namespace SecretSanta.Web.UITests.Pages
 {
     public class UsersPage
     {
-        public const string Slug = "Userss";
+        public const string Slug = "Users";
 
         public IWebDriver Driver { get; }
 
